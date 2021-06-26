@@ -67,16 +67,8 @@ namespace BookingSite.Web.Controllers
             bookingViewModel.NumberOfRooms = Convert.ToInt32(TempData["NoOfRooms"]);
             bookingViewModel.CheckoutDate = Convert.ToDateTime(TempData["CheckOutDate"]);
 
-            bookingViewModel.Hotel = new HotelViewModel();
-            bookingViewModel.Hotel.City = hotel.City;
-            bookingViewModel.Hotel.HotelCode = hotel.HotelCode;
-            bookingViewModel.Hotel.HotelName = hotel.HotelName;
-            bookingViewModel.Hotel.StarRating = hotel.StarRating;
-            bookingViewModel.HotelRoom = new HotelRoomViewModel();
-            bookingViewModel.HotelRoom.HotelCode = hotelRoom.HotelCode;
-            bookingViewModel.HotelRoom.ID = hotelRoom.ID;
-            bookingViewModel.HotelRoom.RoomType = hotelRoom.RoomType;
-            bookingViewModel.HotelRoom.Tariff = hotelRoom.Tariff;
+            bookingViewModel.Hotel = HotelDomainModelToViewModel(hotel);
+            bookingViewModel.HotelRoom = HotelRoomDomainModelToViewModel(hotelRoom);
 
             return View(bookingViewModel);
         }
