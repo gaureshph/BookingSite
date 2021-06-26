@@ -15,7 +15,7 @@ namespace BookingSite.Web.ViewModels
         [Display(Name = "Pax Name")]
         public string PaxName { get; set; }
         [Required]
-        [DataType(DataType.PhoneNumber)]
+        //[RegularExpression(@"^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$",ErrorMessage = "Invalid contact number")]
         [Display(Name = "Contact Number")]
         public string ContactPhone { get; set; }
         [DataType(DataType.Date)]
