@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BookingSite.Web.ViewModels;
@@ -31,6 +32,35 @@ namespace BookingSite.Web.Controllers
             });
 
             return View(bookingsViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddBooking(BookingViewModel bookingViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                bookingViewModel.Date = DateTime.Now;
+
+                var bookingId = await _bookingRepository.AddBookingAsync(new DomainModels.HotelBooking
+                {
+                    CheckoutDate = bookingViewModel.CheckoutDate,
+                    ChickInDate = bookingViewModel.ChickInDate,
+                    ContactPhone = bookingViewModel.ContactPhone,
+                    Date = bookingViewModel.Date,
+                    HotelCode = bookingViewModel.Hotel.HotelCode,
+                    HotelName = bookingViewModel.Hotel.HotelName,
+                    NumberOfRooms = bookingViewModel.NumberOfRooms,
+                    PaxName = bookingViewModel.PaxName,
+                    RoomType = bookingViewModel.HotelRoom.RoomType,
+                    Tariff = bookingViewModel.HotelRoom.Tariff
+                });
+
+                bookingViewModel.ID = bookingId;
+
+                return View("BookingConfirmation", bookingViewModel);
+            }
+
+            return View("Booking", bookingViewModel);
         }
     }
 }
