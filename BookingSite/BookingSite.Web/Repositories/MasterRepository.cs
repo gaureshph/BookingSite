@@ -32,16 +32,6 @@ namespace BookingSite.Web.Repositories
             return await _bookingSiteDbContext.HotelRooms.FindAsync(hotelRoomId);
         }
 
-        public async Task<List<HotelRoom>> GetHotelRoomsAsync(string hotelCode)
-        {
-            var hotelRooms = _bookingSiteDbContext.HotelRooms.AsQueryable();
-            if (!string.IsNullOrWhiteSpace(hotelCode))
-            {
-                hotelRooms = hotelRooms.Where(hotel => hotel.HotelCode == hotelCode);
-            }
-            return await hotelRooms.ToListAsync();
-        }
-
         public async Task<List<Hotel>> GetHotelsAsync(string city)
         {
             var hotels = _bookingSiteDbContext.HotelMaster.AsQueryable();
