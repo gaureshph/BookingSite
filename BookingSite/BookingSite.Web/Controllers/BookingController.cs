@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using BookingSite.Web.Constants;
 using BookingSite.Web.ViewModels;
 using BookingSite.Web.Repositories;
 using BookingSite.Web.DomainModels;
@@ -35,10 +36,10 @@ namespace BookingSite.Web.Controllers
 
                 bookingViewModel.ID = bookingId;
 
-                return View("BookingConfirmation", bookingViewModel);
+                return View(Views.BookingConfirmation, bookingViewModel);
             }
 
-            return View("Booking", bookingViewModel);
+            return View(Views.Booking, bookingViewModel);
         }
 
         #region Private Methods

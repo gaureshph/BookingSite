@@ -4,11 +4,11 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using BookingSite.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using BookingSite.Web.Constants;
 using System.Collections.Generic;
 using BookingSite.Web.ViewModels;
 using BookingSite.Web.Repositories;
 using BookingSite.Web.DomainModels;
-using BookingSite.Web.Constants;
 
 namespace BookingSite.Web.Controllers
 {
@@ -53,7 +53,7 @@ namespace BookingSite.Web.Controllers
 
             ViewBag.ListOfCities = await GetCitiesAsync();
             ViewBag.ListOfNoOfRoomsOptions = GetNoOfRoomsOptions();
-            return View("Search", searchViewModel);
+            return View(Views.Search, searchViewModel);
         }
 
         public async Task<IActionResult> Booking(int hotelRoomId)
