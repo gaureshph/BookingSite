@@ -43,11 +43,6 @@ namespace BookingSite.Web.Controllers
 
                 var hotelsViewModel = hotels.Select(hotel => HotelDomainModelToViewModel(hotel)).ToList();
 
-                foreach (var hotel in hotelsViewModel)
-                {
-                    hotel.HotelRooms = (await _masterRepository.GetHotelRoomsAsync(hotel.HotelCode)).Select(room => HotelRoomDomainModelToViewModel(room)).ToList();
-                }
-
                 return View(hotelsViewModel);
             }
 
@@ -105,7 +100,7 @@ namespace BookingSite.Web.Controllers
                 HotelName = hotel.HotelName,
                 HotelCode = hotel.HotelCode,
                 StarRating = hotel.StarRating,
-                HotelRooms = new List<HotelRoomViewModel>()
+                HotelRooms = hotel.Rooms.Select(room => HotelRoomDomainModelToViewModel(room)).ToList()
             };
         }
 

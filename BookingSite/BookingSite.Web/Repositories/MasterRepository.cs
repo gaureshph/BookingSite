@@ -49,7 +49,7 @@ namespace BookingSite.Web.Repositories
             {
                 hotels = hotels.Where(hotel => hotel.City == city);
             }
-            return await hotels.ToListAsync();
+            return await hotels.Include(hotel => hotel.Rooms).ToListAsync();
         }
 
         public List<NoOfRoomsOption> GetNoOfRoomsOptions()

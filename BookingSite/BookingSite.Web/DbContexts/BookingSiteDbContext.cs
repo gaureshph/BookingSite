@@ -23,6 +23,11 @@ namespace BookingSite.Web.DbContexts
             modelBuilder.Entity<HotelRoom>().HasData(new HotelRoom { ID = 4, RoomType = "Single", HotelCode = "NMHD", Tariff = 1500 });
             modelBuilder.Entity<HotelRoom>().HasData(new HotelRoom { ID = 5, RoomType = "Double", HotelCode = "NMHD", Tariff = 2500 });
             modelBuilder.Entity<HotelRoom>().HasData(new HotelRoom { ID = 6, RoomType = "Twin", HotelCode = "NMHD", Tariff = 2650 });
+            modelBuilder.Entity<HotelRoom>()
+                .HasOne(room => room.Hotel)
+                .WithMany(hotel => hotel.Rooms)
+                .HasForeignKey(room => room.HotelCode)
+                .HasPrincipalKey(hotel => hotel.HotelCode);
             base.OnModelCreating(modelBuilder);
         }
     }
