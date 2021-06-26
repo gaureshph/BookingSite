@@ -1,0 +1,78 @@
+﻿@model BookingSite.Web.ViewModels.SearchResultViewModel
+
+@{
+    ViewData["Title"] = "Search Results";
+}
+
+<h2>Search Results</h2>
+<form asp-action="Booking">
+    <input type="hidden" value="@Model.NoOfRooms" name="NoOfRooms" />
+    <input type="hidden" value="@Model.CheckInDate" name="CheckInDate" />
+    <input type="hidden" value="@Model.CheckOutDate" name="CheckOutDate" />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Hotels[0].HotelName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Hotels[0].City)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Hotels[0].StarRating)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Hotels[0].HotelRooms)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Hotels != null && Model.Hotels.Any())
+            {
+                @foreach (var hotel in Model.Hotels)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => hotel.HotelName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => hotel.City)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => hotel.StarRating)
+                        </td>
+                        <td>
+                            <table>
+                                @if (hotel != null && hotel.HotelRooms != null && hotel.HotelRooms.Any())
+                                {
+                                    foreach (var room in hotel.HotelRooms)
+                                    {
+                                        <tr>
+                                            <td>@room.RoomType</td>
+                                            <td>@room.Tariff</td>
+                                            <td>
+                                                @Html.ActionLink("Select", "Booking", "Hotel", new { hotelRoomId = room.ID })
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>No Rooms To Show</td>
+                                    </tr>
+                                }
+                            </table>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <th colspan="4">No Hotels Match The Search</th>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
