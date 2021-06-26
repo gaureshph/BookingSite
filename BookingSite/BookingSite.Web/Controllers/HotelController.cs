@@ -35,6 +35,8 @@ namespace BookingSite.Web.Controllers
             TempData["CheckOutDate"] = searchViewModel.CheckOutDate;
             TempData["City"] = searchViewModel.City;
 
+            ValidateViewModel(searchViewModel);
+
             if (ModelState.IsValid)
             {
                 var hotels = await _masterRepository.GetHotelsAsync(searchViewModel.City);
@@ -125,6 +127,15 @@ namespace BookingSite.Web.Controllers
                 Tariff = room.Tariff
             };
         }
+
+        private void ValidateViewModel(SearchViewModel searchViewModel)
+        {
+            if(searchViewModel.ChickInDate > searchViewModel.CheckOutDate)
+            {
+                ModelState.AddModelError("ChickInDate", "Check in date cannot be greater than the check out date");
+            }
+        }
+
         #endregion
     }
 }
