@@ -134,6 +134,10 @@ namespace BookingSite.Web.Controllers
             {
                 ModelState.AddModelError("ChickInDate", "Check in date cannot be greater than the check out date");
             }
+            if (searchViewModel.ChickInDate < DateTime.Now)
+            {
+                ModelState.AddModelError("ChickInDate", "Cannot search for past date");
+            }
         }
 
         #endregion
