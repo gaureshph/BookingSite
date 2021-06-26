@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using BookingSite.Web.ViewModels;
 using BookingSite.Web.Repositories;
 using BookingSite.Web.DomainModels;
+using BookingSite.Web.Constants;
 
 namespace BookingSite.Web.Controllers
 {
@@ -30,10 +31,9 @@ namespace BookingSite.Web.Controllers
 
         public async Task<IActionResult> SearchResults(SearchViewModel searchViewModel)
         {
-            TempData["NoOfRooms"] = searchViewModel.NoOfRooms;
-            TempData["ChickInDate"] = searchViewModel.ChickInDate;
-            TempData["CheckOutDate"] = searchViewModel.CheckOutDate;
-            TempData["City"] = searchViewModel.City;
+            TempData[TempDataKeys.NoOfRooms] = searchViewModel.NoOfRooms;
+            TempData[TempDataKeys.ChickInDate] = searchViewModel.ChickInDate;
+            TempData[TempDataKeys.CheckOutDate] = searchViewModel.CheckOutDate;
 
             ValidateViewModel(searchViewModel);
 
@@ -63,9 +63,9 @@ namespace BookingSite.Web.Controllers
             var hotel = await _masterRepository.GetHotelByHotelRoomAsync(hotelRoomId);
             var hotelRoom = await _masterRepository.GetHotelRoomAsync(hotelRoomId);
 
-            bookingViewModel.ChickInDate = Convert.ToDateTime(TempData["ChickInDate"]);
-            bookingViewModel.NumberOfRooms = Convert.ToInt32(TempData["NoOfRooms"]);
-            bookingViewModel.CheckoutDate = Convert.ToDateTime(TempData["CheckOutDate"]);
+            bookingViewModel.ChickInDate = Convert.ToDateTime(TempData[TempDataKeys.ChickInDate]);
+            bookingViewModel.NumberOfRooms = Convert.ToInt32(TempData[TempDataKeys.NoOfRooms]);
+            bookingViewModel.CheckoutDate = Convert.ToDateTime(TempData[TempDataKeys.CheckOutDate]);
 
             bookingViewModel.Hotel = HotelDomainModelToViewModel(hotel);
             bookingViewModel.HotelRoom = HotelRoomDomainModelToViewModel(hotelRoom);
