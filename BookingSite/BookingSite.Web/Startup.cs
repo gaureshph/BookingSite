@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using BookingSite.Web.DbContexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using BookingSite.Web.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +23,8 @@ namespace BookingSite.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<BookingSiteDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BookingSiteDbContext")));
+            services.AddScoped<IMasterRepository, MasterRepository>();
+            services.AddScoped<IBookingRepository, BookingRepository>();
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -54,7 +57,7 @@ namespace BookingSite.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Hotel}/{action=Search}/{id?}");
             });
         }
     }
