@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using BookingSite.Web.ViewModels;
 using BookingSite.Web.Repositories;
+using BookingSite.Web.DomainModels;
 
 namespace BookingSite.Web.Controllers
 {
@@ -38,24 +39,11 @@ namespace BookingSite.Web.Controllers
             {
                 var hotels = await _masterRepository.GetHotelsAsync(searchViewModel.City);
 
-                var hotelsViewModel = hotels.Select(hotel => new HotelViewModel
-                {
-                    City = hotel.City,
-                    HotelName = hotel.HotelName,
-                    HotelCode = hotel.HotelCode,
-                    StarRating = hotel.StarRating,
-                    HotelRooms = new List<HotelRoomViewModel>()
-                }).ToList();
+                var hotelsViewModel = hotels.Select(hotel => HotelDomainModelToViewModel(hotel)).ToList();
 
                 foreach (var hotel in hotelsViewModel)
                 {
-                    hotel.HotelRooms = (await _masterRepository.GetHotelRoomsAsync(hotel.HotelCode)).Select(room => new HotelRoomViewModel
-                    {
-                        HotelCode = room.HotelCode,
-                        ID = room.ID,
-                        RoomType = room.RoomType,
-                        Tariff = room.Tariff
-                    }).ToList();
+                    hotel.HotelRooms = (await _masterRepository.GetHotelRoomsAsync(hotel.HotelCode)).Select(room => HotelRoomDomainModelToViewModel(room)).ToList();
                 }
 
                 return View(hotelsViewModel);
@@ -115,6 +103,28 @@ namespace BookingSite.Web.Controllers
             }).ToList();
         }
 
+        private HotelViewModel HotelDomainModelToViewModel(Hotel hotel)
+        {
+            return new HotelViewModel
+            {
+                City = hotel.City,
+                HotelName = hotel.HotelName,
+                HotelCode = hotel.HotelCode,
+                StarRating = hotel.StarRating,
+                HotelRooms = new List<HotelRoomViewModel>()
+            };
+        }
+
+        private HotelRoomViewModel HotelRoomDomainModelToViewModel(HotelRoom room)
+        {
+            return new HotelRoomViewModel
+            {
+                HotelCode = room.HotelCode,
+                ID = room.ID,
+                RoomType = room.RoomType,
+                Tariff = room.Tariff
+            };
+        }
         #endregion
     }
 }
