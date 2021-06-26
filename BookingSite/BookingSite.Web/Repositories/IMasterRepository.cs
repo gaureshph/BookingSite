@@ -11,5 +11,6 @@ namespace BookingSite.Web.Repositories
         Task<Hotel> GetHotelByHotelRoomAsync(int hotelRoomId);
         Task<List<City>> GetCitiesAsync();
         List<NoOfRoomsOption> GetNoOfRoomsOptions();
+        Task<HotelRoom> GetHotelRoomAsync(int hotelRoomId);
     }
 }

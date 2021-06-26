@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using BookingSite.Web.Models;
@@ -12,9 +13,11 @@ namespace BookingSite.Web.Controllers
     public class HotelController : Controller
     {
         private readonly IMasterRepository _masterRepository;
-        public HotelController(IMasterRepository masterRepository)
+        private readonly IBookingRepository _bookingRepository;
+        public HotelController(IMasterRepository masterRepository, IBookingRepository bookingRepository)
         {
             _masterRepository = masterRepository;
+            _bookingRepository = bookingRepository;
         }
 
         public async Task<IActionResult> Search()
@@ -26,17 +29,16 @@ namespace BookingSite.Web.Controllers
 
         public async Task<IActionResult> SearchResults(SearchViewModel searchViewModel)
         {
+            TempData["NoOfRooms"] = searchViewModel.NoOfRooms;
+            TempData["ChickInDate"] = searchViewModel.ChickInDate;
+            TempData["CheckOutDate"] = searchViewModel.CheckOutDate;
+            TempData["City"] = searchViewModel.City;
+
             if (ModelState.IsValid)
             {
-                var searchResultViewModel = new SearchResultViewModel();
-
-                searchResultViewModel.City = searchViewModel.City;
-                searchResultViewModel.CheckInDate = searchViewModel.CheckInDate;
-                searchResultViewModel.CheckOutDate = searchViewModel.CheckOutDate;
-                searchResultViewModel.NoOfRooms = searchViewModel.NoOfRooms;
                 var hotels = await _masterRepository.GetHotelsAsync(searchViewModel.City);
 
-                searchResultViewModel.Hotels = hotels.Select(hotel => new HotelViewModel
+                var hotelsViewModel = hotels.Select(hotel => new HotelViewModel
                 {
                     City = hotel.City,
                     HotelName = hotel.HotelName,
@@ -45,7 +47,7 @@ namespace BookingSite.Web.Controllers
                     HotelRooms = new List<HotelRoomViewModel>()
                 }).ToList();
 
-                foreach (var hotel in searchResultViewModel.Hotels)
+                foreach (var hotel in hotelsViewModel)
                 {
                     hotel.HotelRooms = (await _masterRepository.GetHotelRoomsAsync(hotel.HotelCode)).Select(room => new HotelRoomViewModel
                     {
@@ -56,7 +58,7 @@ namespace BookingSite.Web.Controllers
                     }).ToList();
                 }
 
-                return View(searchResultViewModel);
+                return View(hotelsViewModel);
             }
 
             ViewBag.ListOfCities = await GetCitiesAsync();
@@ -64,11 +66,58 @@ namespace BookingSite.Web.Controllers
             return View("Search", searchViewModel);
         }
 
-        public async Task<IActionResult> Booking(SearchResultViewModel searchResultViewModel)
+        public async Task<IActionResult> Booking(int hotelRoomId)
         {
-            ViewBag.ListOfCities = await GetCitiesAsync();
-            ViewBag.ListOfNoOfRoomsOptions = GetNoOfRoomsOptions();
-            return View();
+            var bookingViewModel = new BookingViewModel();
+
+            var hotel = await _masterRepository.GetHotelByHotelRoomAsync(hotelRoomId);
+            var hotelRoom = await _masterRepository.GetHotelRoomAsync(hotelRoomId);
+
+            bookingViewModel.ChickInDate = Convert.ToDateTime(TempData["ChickInDate"]);
+            bookingViewModel.NumberOfRooms = Convert.ToInt32(TempData["NoOfRooms"]);
+            bookingViewModel.CheckoutDate = Convert.ToDateTime(TempData["CheckOutDate"]);
+
+            bookingViewModel.Hotel = new HotelViewModel();
+            bookingViewModel.Hotel.City = hotel.City;
+            bookingViewModel.Hotel.HotelCode = hotel.HotelCode;
+            bookingViewModel.Hotel.HotelName = hotel.HotelName;
+            bookingViewModel.Hotel.StarRating = hotel.StarRating;
+            bookingViewModel.HotelRoom = new HotelRoomViewModel();
+            bookingViewModel.HotelRoom.HotelCode = hotelRoom.HotelCode;
+            bookingViewModel.HotelRoom.ID = hotelRoom.ID;
+            bookingViewModel.HotelRoom.RoomType = hotelRoom.RoomType;
+            bookingViewModel.HotelRoom.Tariff = hotelRoom.Tariff;
+
+            return View(bookingViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddBooking(BookingViewModel bookingViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                bookingViewModel.Date = DateTime.Now;
+
+                var bookingId = await _bookingRepository.AddBookingAsync(new DomainModels.HotelBooking
+                {
+                    CheckoutDate = bookingViewModel.CheckoutDate,
+                    ChickInDate = bookingViewModel.ChickInDate,
+                    ContactPhone = bookingViewModel.ContactPhone,
+                    Date = bookingViewModel.Date,
+                    HotelCode = bookingViewModel.Hotel.HotelCode,
+                    HotelName = bookingViewModel.Hotel.HotelName,
+                    NumberOfRooms = bookingViewModel.NumberOfRooms,
+                    PaxName = bookingViewModel.PaxName,
+                    RoomType = bookingViewModel.HotelRoom.RoomType,
+                    Tariff = bookingViewModel.HotelRoom.Tariff
+                });
+
+                bookingViewModel.ID = bookingId;
+
+                return View("BookingConfirmation", bookingViewModel);
+            }
+
+            return View("Booking", bookingViewModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

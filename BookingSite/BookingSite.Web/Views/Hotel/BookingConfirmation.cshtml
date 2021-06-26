@@ -1,0 +1,64 @@
+﻿@model BookingSite.Web.ViewModels.BookingViewModel
+
+@{
+    ViewData["Title"] = "BookingConfirmation";
+}
+
+<h2>Booking Confirmation</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Hotel.HotelName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Hotel.HotelName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Hotel.StarRating)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Hotel.StarRating)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Hotel.City)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Hotel.City)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NumberOfRooms)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NumberOfRooms)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ChickInDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ChickInDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CheckoutDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CheckoutDate)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Search">Back to Search</a>
+</div>

@@ -8,7 +8,7 @@ namespace BookingSite.Web.ViewModels
         [Required]
         public string City { get; set; }
         [DataType(DataType.Date)]
-        public DateTime CheckInDate { get; set; }
+        public DateTime ChickInDate { get; set; }
         [DataType(DataType.Date)]
         public DateTime CheckOutDate { get; set; }
         public int NoOfRooms { get; set; }

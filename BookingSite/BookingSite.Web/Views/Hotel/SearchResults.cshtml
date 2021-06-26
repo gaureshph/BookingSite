@@ -1,4 +1,4 @@
-﻿@model BookingSite.Web.ViewModels.SearchResultViewModel
+﻿@model IEnumerable<BookingSite.Web.ViewModels.HotelViewModel>
 
 @{
     ViewData["Title"] = "Search Results";
@@ -6,30 +6,27 @@
 
 <h2>Search Results</h2>
 <form asp-action="Booking">
-    <input type="hidden" value="@Model.NoOfRooms" name="NoOfRooms" />
-    <input type="hidden" value="@Model.CheckInDate" name="CheckInDate" />
-    <input type="hidden" value="@Model.CheckOutDate" name="CheckOutDate" />
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Hotels[0].HotelName)
+                    @Html.DisplayNameFor(model => model.HotelName)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Hotels[0].City)
+                    @Html.DisplayNameFor(model => model.City)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Hotels[0].StarRating)
+                    @Html.DisplayNameFor(model => model.StarRating)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Hotels[0].HotelRooms)
+                    @Html.DisplayNameFor(model => model.HotelRooms)
                 </th>
             </tr>
         </thead>
         <tbody>
-            @if (Model != null && Model.Hotels != null && Model.Hotels.Any())
+            @if (Model != null && Model.Any())
             {
-                @foreach (var hotel in Model.Hotels)
+                @foreach (var hotel in Model)
                 {
                     <tr>
                         <td>
