@@ -34,30 +34,40 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PaxName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ContactPhone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ChickInDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CheckoutDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumberOfRooms)
-            </td>
-        </tr>
-}
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PaxName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ContactPhone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ChickInDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CheckoutDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumberOfRooms)
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7">No Booking Yet</td>
+            </tr>
+        }
     </tbody>
 </table>

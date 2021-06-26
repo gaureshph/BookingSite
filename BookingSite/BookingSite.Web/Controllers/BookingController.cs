@@ -20,7 +20,7 @@ namespace BookingSite.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var bookings = await _bookingRepository.GetBookingsAsync();
-            var bookingsViewModel = bookings.Select(booking => BookingModelToViewModel(booking));
+            var bookingsViewModel = bookings.Select(booking => BookingModelToViewModel(booking)).OrderByDescending(booking => booking.Date);
 
             return View(bookingsViewModel);
         }        
