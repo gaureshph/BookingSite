@@ -1,4 +1,5 @@
 ﻿using System;
+using BookingSite.Web.Constants;
 using System.ComponentModel.DataAnnotations;
 
 namespace BookingSite.Web.ViewModels
@@ -15,7 +16,7 @@ namespace BookingSite.Web.ViewModels
         [Display(Name = "Pax Name")]
         public string PaxName { get; set; }
         [Required]
-        //[RegularExpression(@"^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$",ErrorMessage = "Invalid contact number")]
+        [RegularExpression(RegularExpressions.ContactNumber, ErrorMessage = ValdiationMessages.InvalidContactNumber)]
         [Display(Name = "Contact Number")]
         public string ContactPhone { get; set; }
         [DataType(DataType.Date)]

@@ -3,6 +3,7 @@
     public class ValdiationMessages
     {
         public const string CheckInGreaterThanCheckOut = "Check in date cannot be greater than the check out date";
-        public const string CheckInPastDate = "Cannot search for past date";    
+        public const string CheckInPastDate = "Cannot search for past date";
+        public const string InvalidContactNumber = "Invalid Contact Number";
     }
 }
